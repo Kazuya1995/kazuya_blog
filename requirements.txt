@@ -1,0 +1,8 @@
+django==5.2.1
+pillow==11.2.1
+python-dotenv==1.1.0
+django-markdownx==4.0.8
+markdown==3.5.2
+gunicorn==21.2.0
+psycopg2-binary==2.9.9
+django-debug-toolbar==4.3.0 

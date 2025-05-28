@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}技術ブログ{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- シンタックスハイライト用のCSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <style>
+        /* ブログ記事のスタイル */
+        .blog-post-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #2c3e50;
+        }
+
+        .blog-post-content h2 {
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .blog-post-content h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #34495e;
+            font-weight: 600;
+        }
+
+        .blog-post-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-post-content ul, 
+        .blog-post-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .blog-post-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-post-content pre {
+            background-color: #0d1117;
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            border: 1px solid #30363d;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .blog-post-content code {
+            font-family: 'JetBrains Mono', 'Source Code Pro', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #e6edf3;
+        }
+
+        /* インラインコードのスタイル */
+        .blog-post-content p code,
+        .blog-post-content li code {
+            background-color: #f8f9fa;
+            color: #e83e8c;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+            border: 1px solid #dee2e6;
+        }
+
+        /* コードブロックのタイトル（オプション） */
+        .blog-post-content pre::before {
+            content: attr(data-language);
+            display: block;
+            background-color: #161b22;
+            color: #8b949e;
+            font-size: 0.8rem;
+            padding: 0.5rem 1.2rem;
+            margin: -1.2rem -1.2rem 1rem -1.2rem;
+            border-bottom: 1px solid #30363d;
+            border-radius: 7px 7px 0 0;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .blog-post-content blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 1rem;
+            margin-left: 0;
+            margin-bottom: 1.5rem;
+            color: #7f8c8d;
+        }
+
+        /* テーブルのスタイル */
+        .blog-post-content table {
+            width: 100%;
+            margin-bottom: 1.5rem;
+            border-collapse: collapse;
+        }
+
+        .blog-post-content th,
+        .blog-post-content td {
+            padding: 0.75rem;
+            border: 1px solid #dee2e6;
+        }
+
+        .blog-post-content th {
+            background-color: #f8f9fa;
+        }
+
+        /* 記事メタ情報のスタイル */
+        .blog-post-meta {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .blog-post-meta .badge {
+            font-size: 0.85rem;
+            padding: 0.4rem 0.8rem;
+            margin-right: 0.5rem;
+        }
+
+        /* 記事タイトルのスタイル */
+        .blog-post h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        /* 抜粋のスタイル */
+        .blog-post .lead {
+            font-size: 1.25rem;
+            font-weight: 300;
+            color: #6c757d;
+            border-left: 4px solid #3498db;
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'blog:post_list' %}">技術ブログ</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blog:post_list' %}">記事一覧</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                {% block content %}{% endblock %}
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">サイドバー</h5>
+                    </div>
+                    <div class="card-body">
+                        {% block sidebar %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light mt-5 py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 技術ブログ. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- シンタックスハイライト用のJavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html> 
