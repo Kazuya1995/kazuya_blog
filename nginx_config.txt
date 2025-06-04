@@ -1,0 +1,28 @@
+server {
+    listen 80;
+    server_name higakazuya.online www.higakazuya.online 3.107.27.105;
+
+    location = /favicon.ico {
+        access_log off;
+        log_not_found off;
+    }
+
+    location /static/ {
+        alias /home/ubuntu/kazuya_blog/staticfiles/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    location /media/ {
+        alias /home/ubuntu/kazuya_blog/media/;
+        expires 30d;
+        add_header Cache-Control "public";
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/ubuntu/kazuya_blog/gunicorn.sock;
+    }
+
+    client_max_body_size 20M;
+}

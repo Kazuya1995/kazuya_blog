@@ -1,5 +1,7 @@
 import os
+from dotenv import load_dotenv
 from .base import *
+load_dotenv()
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
@@ -7,13 +9,9 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    'your-domain.com',  # 本番環境のドメインに変更
-    'www.your-domain.com',
-]
+ALLOWED_HOSTS = ['higakazuya.online', 'www.higakazuya.online', '3.107.27.105']
 
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -26,18 +24,18 @@ DATABASES = {
 }
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
-STATIC_ROOT = '/var/www/your-domain.com/static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = '/home/ubuntu/kazuya_blog/staticfiles/'
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # Media files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/var/www/your-domain.com/media/'
+MEDIA_ROOT = '/home/ubuntu/kazuya_blog/media/'
 
 # Security settings
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = False  # Temporarily disabled until SSL is configured
+SESSION_COOKIE_SECURE = False  # Temporarily disabled until SSL is configured
+CSRF_COOKIE_SECURE = False  # Temporarily disabled until SSL is configured
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
@@ -52,7 +50,7 @@ EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'your-domain <noreply@your-domain.com>'
+DEFAULT_FROM_EMAIL = 'kazuya_blog <noreply@higakazuya.online>'
 
 # Logging
 LOGGING = {
@@ -72,4 +70,4 @@ LOGGING = {
             'propagate': True,
         },
     },
-} 
+}
