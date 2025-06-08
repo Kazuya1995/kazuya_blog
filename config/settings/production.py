@@ -9,7 +9,23 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['higakazuya.online', 'www.higakazuya.online', '3.107.27.105']
+ALLOWED_HOSTS = [
+    'higakazuya.online',
+    'www.higakazuya.online',
+    '3.107.27.105',
+    'ec2-3-107-27-105.ap-southeast-2.compute.amazonaws.com'
+]
+
+# CSRF settings
+CSRF_TRUSTED_ORIGINS = [
+    'http://higakazuya.online',
+    'http://www.higakazuya.online',
+    'http://3.107.27.105',
+    'https://higakazuya.online',
+    'https://www.higakazuya.online',
+    'https://3.107.27.105',
+    'https://ec2-3-107-27-105.ap-southeast-2.compute.amazonaws.com'
+]
 
 # Database
 DATABASES = {
@@ -33,9 +49,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = '/home/ubuntu/kazuya_blog/media/'
 
 # Security settings
-SECURE_SSL_REDIRECT = False  # Temporarily disabled until SSL is configured
-SESSION_COOKIE_SECURE = False  # Temporarily disabled until SSL is configured
-CSRF_COOKIE_SECURE = False  # Temporarily disabled until SSL is configured
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'

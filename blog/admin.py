@@ -23,9 +23,27 @@ class TagAdmin(admin.ModelAdmin):
 class PostAdmin(MarkdownxModelAdmin):
     list_display = ('title', 'slug', 'category', 'status', 'published_at', 'created_at', 'updated_at')
     list_filter = ('status', 'category', 'tags', 'created_at', 'updated_at', 'published_at')
-    search_fields = ('title', 'content')
+    search_fields = ('title', 'content', 'content_rich')
     prepopulated_fields = {'slug': ('title',)}
-    raw_id_fields = ('category', 'tags')
     date_hierarchy = 'published_at'
     ordering = ('-published_at', '-created_at')
     filter_horizontal = ('tags',)
+    
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('title', 'slug', 'category', 'tags', 'status', 'published_at')
+        }),
+        ('コンテンツ', {
+            'fields': ('content_rich', 'content'),
+            'description': 'リッチエディタまたはMarkdownのどちらかを使用してください。リッチエディタが優先されます。'
+        }),
+        ('メタ情報', {
+            'fields': ('featured_image', 'excerpt'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    class Media:
+        css = {
+            'all': ('admin/css/custom_admin.css',)
+        }

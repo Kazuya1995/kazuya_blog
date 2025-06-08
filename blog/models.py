@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.urls import reverse
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class Category(models.Model):
@@ -50,7 +51,8 @@ class Post(models.Model):
 
     title = models.CharField('タイトル', max_length=255)
     slug = models.SlugField('URLスラッグ', unique=True)
-    content = MarkdownxField('本文')
+    content = MarkdownxField('本文（Markdown）', blank=True)
+    content_rich = RichTextUploadingField('本文（リッチエディタ）', blank=True, config_name='default')
     featured_image = models.ImageField('アイキャッチ画像', upload_to='blog/images/%Y/%m/%d/', blank=True, null=True)
     excerpt = models.TextField('抜粋', blank=True)
     category = models.ForeignKey(Category, verbose_name='カテゴリ', on_delete=models.PROTECT)
@@ -79,3 +81,10 @@ class Post(models.Model):
     @property
     def formatted_markdown(self):
         return markdownify(self.content)
+    
+    @property
+    def get_content(self):
+        """リッチエディタの内容があればそれを、なければMarkdownを返す"""
+        if self.content_rich.strip():
+            return self.content_rich
+        return self.formatted_markdown

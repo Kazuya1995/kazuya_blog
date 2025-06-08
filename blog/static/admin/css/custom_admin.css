@@ -1,0 +1,81 @@
+/* 管理画面カスタムCSS */
+
+/* CKEditorのスタイル調整 */
+.django-ckeditor-widget {
+    width: 100% !important;
+}
+
+/* フィールドセットのスタイル */
+.fieldset {
+    margin-bottom: 20px;
+}
+
+.fieldset h2 {
+    background: #417690;
+    color: white;
+    padding: 10px 15px;
+    margin: 0;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fieldset .description {
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 0;
+    font-style: italic;
+    color: #666;
+}
+
+/* コンテンツフィールドの調整 */
+.field-content_rich {
+    margin-bottom: 20px;
+}
+
+.field-content {
+    margin-top: 20px;
+}
+
+/* Markdownエディタとリッチエディタの区別 */
+.field-content_rich .help {
+    background: #e8f5e8;
+    border-left: 4px solid #4caf50;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.field-content .help {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .django-ckeditor-widget {
+        width: 100% !important;
+        min-width: 300px;
+    }
+}
+
+/* 画像アップロード関連 */
+.cke_dialog {
+    z-index: 10001 !important;
+}
+
+/* ツールバーの調整 */
+.cke_toolbar {
+    background: #f5f5f5 !important;
+    border-bottom: 1px solid #ddd !important;
+}
+
+.cke_button {
+    background: transparent !important;
+}
+
+.cke_button:hover {
+    background: #e0e0e0 !important;
+}

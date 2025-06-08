@@ -23,6 +23,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
     'markdownx',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -86,3 +88,73 @@ MARKDOWNX_MARKDOWN_EXTENSIONS = [
     'markdown.extensions.codehilite',
     'markdown.extensions.toc',
 ]
+
+# CKEditorの設定
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_IMAGE_BACKEND = 'pillow'
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 400,
+        'width': '100%',
+        'extraPlugins': ','.join([
+            'uploadimage',
+            'div',
+            'autolink',
+            'autoembed',
+            'embedsemantic',
+            'autogrow',
+            'widget',
+            'lineutils',
+            'clipboard',
+            'dialog',
+            'dialogui',
+            'elementspath'
+        ]),
+    },
+    'blog_post': {
+        'toolbar': [
+            ['Undo', 'Redo'],
+            ['Bold', 'Italic', 'Underline', 'Strike'],
+            ['NumberedList', 'BulletedList'],
+            ['Link', 'Unlink'],
+            ['Image', 'Table'],
+            ['Format', 'Styles'],
+            ['TextColor', 'BGColor'],
+            ['Maximize'],
+            ['Source'],
+        ],
+        'height': 500,
+        'width': '100%',
+        'extraPlugins': ','.join([
+            'uploadimage',
+            'image2',
+            'div',
+            'autolink',
+            'autoembed',
+            'embedsemantic',
+            'autogrow',
+            'widget',
+            'lineutils',
+            'clipboard',
+            'dialog',
+            'dialogui',
+            'elementspath'
+        ]),
+        'removePlugins': 'stylesheetparser',
+        'allowedContent': True,
+        'format_tags': 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
+        'stylesSet': [
+            {'name': '段落', 'element': 'p'},
+            {'name': '見出し1', 'element': 'h1'},
+            {'name': '見出し2', 'element': 'h2'},
+            {'name': '見出し3', 'element': 'h3'},
+            {'name': '見出し4', 'element': 'h4'},
+            {'name': 'コードブロック', 'element': 'pre'},
+            {'name': '引用', 'element': 'blockquote'},
+        ],
+        'versionCheck': False,
+    }
+}

@@ -6,7 +6,7 @@ SECRET_KEY = 'django-insecure--#jwhqi&4-hm0+gmqj#*t0h_^(s93ddqljruy0psi0dc#j$&ee
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '*']
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -32,4 +32,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Django Debug Toolbar
 INSTALLED_APPS += ['debug_toolbar']
 MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
-INTERNAL_IPS = ['127.0.0.1'] 
+INTERNAL_IPS = ['127.0.0.1']
