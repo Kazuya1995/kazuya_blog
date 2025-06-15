@@ -267,5 +267,537 @@
     "created_at": "2025-06-15T07:39:16.432Z",
     "updated_at": "2025-06-15T09:27:13.330Z"
   }
+},
+{
+  "model": "quiz.userprogress",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "study_day": 1,
+    "total_score": 90,
+    "created_at": "2025-06-15T07:40:15.895Z",
+    "updated_at": "2025-06-15T08:50:18.781Z",
+    "vocabulary_completed": [],
+    "grammar_completed": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "listening_completed": []
+  }
+},
+{
+  "model": "quiz.userprogress",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "study_day": 1,
+    "total_score": 80,
+    "created_at": "2025-06-15T07:46:13.044Z",
+    "updated_at": "2025-06-15T09:26:25.933Z",
+    "vocabulary_completed": [
+      1,
+      2,
+      5,
+      6,
+      7
+    ],
+    "grammar_completed": [],
+    "listening_completed": [
+      4
+    ]
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 1,
+  "fields": {
+    "user": 3,
+    "quiz_type": "vocabulary",
+    "question_id": 6,
+    "user_answer": "D",
+    "is_correct": true,
+    "answered_at": "2025-06-15T07:49:47.572Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "quiz_type": "vocabulary",
+    "question_id": 7,
+    "user_answer": "C",
+    "is_correct": true,
+    "answered_at": "2025-06-15T07:50:06.229Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 3,
+  "fields": {
+    "user": 3,
+    "quiz_type": "vocabulary",
+    "question_id": 7,
+    "user_answer": "B",
+    "is_correct": true,
+    "answered_at": "2025-06-15T07:50:19.193Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 4,
+  "fields": {
+    "user": 3,
+    "quiz_type": "vocabulary",
+    "question_id": 5,
+    "user_answer": "D",
+    "is_correct": true,
+    "answered_at": "2025-06-15T07:50:25.565Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 5,
+  "fields": {
+    "user": 3,
+    "quiz_type": "vocabulary",
+    "question_id": 1,
+    "user_answer": "C",
+    "is_correct": true,
+    "answered_at": "2025-06-15T07:50:32.730Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 6,
+  "fields": {
+    "user": 3,
+    "quiz_type": "vocabulary",
+    "question_id": 2,
+    "user_answer": "C",
+    "is_correct": true,
+    "answered_at": "2025-06-15T07:50:39.837Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 7,
+  "fields": {
+    "user": 3,
+    "quiz_type": "vocabulary",
+    "question_id": 8,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T07:50:45.994Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 8,
+  "fields": {
+    "user": 3,
+    "quiz_type": "vocabulary",
+    "question_id": 2,
+    "user_answer": "D",
+    "is_correct": false,
+    "answered_at": "2025-06-15T07:51:06.270Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 9,
+  "fields": {
+    "user": 3,
+    "quiz_type": "vocabulary",
+    "question_id": 2,
+    "user_answer": "C",
+    "is_correct": true,
+    "answered_at": "2025-06-15T07:51:35.749Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 10,
+  "fields": {
+    "user": 3,
+    "quiz_type": "vocabulary",
+    "question_id": 8,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T07:51:39.458Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 11,
+  "fields": {
+    "user": 1,
+    "quiz_type": "grammar",
+    "question_id": 1,
+    "user_answer": "A",
+    "is_correct": true,
+    "answered_at": "2025-06-15T08:46:22.547Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 12,
+  "fields": {
+    "user": 1,
+    "quiz_type": "grammar",
+    "question_id": 3,
+    "user_answer": "A",
+    "is_correct": true,
+    "answered_at": "2025-06-15T08:46:46.357Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 13,
+  "fields": {
+    "user": 1,
+    "quiz_type": "grammar",
+    "question_id": 1,
+    "user_answer": "A",
+    "is_correct": true,
+    "answered_at": "2025-06-15T08:47:04.447Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 14,
+  "fields": {
+    "user": 1,
+    "quiz_type": "grammar",
+    "question_id": 5,
+    "user_answer": "A",
+    "is_correct": true,
+    "answered_at": "2025-06-15T08:47:20.071Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 15,
+  "fields": {
+    "user": 1,
+    "quiz_type": "grammar",
+    "question_id": 5,
+    "user_answer": "A",
+    "is_correct": true,
+    "answered_at": "2025-06-15T08:47:28.903Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 16,
+  "fields": {
+    "user": 1,
+    "quiz_type": "grammar",
+    "question_id": 2,
+    "user_answer": "A",
+    "is_correct": true,
+    "answered_at": "2025-06-15T08:47:34.118Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 17,
+  "fields": {
+    "user": 1,
+    "quiz_type": "grammar",
+    "question_id": 4,
+    "user_answer": "A",
+    "is_correct": true,
+    "answered_at": "2025-06-15T08:47:43.882Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 18,
+  "fields": {
+    "user": 1,
+    "quiz_type": "grammar",
+    "question_id": 3,
+    "user_answer": "A",
+    "is_correct": true,
+    "answered_at": "2025-06-15T08:50:07.279Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 19,
+  "fields": {
+    "user": 1,
+    "quiz_type": "grammar",
+    "question_id": 5,
+    "user_answer": "A",
+    "is_correct": true,
+    "answered_at": "2025-06-15T08:50:18.776Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 20,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 1,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T09:22:46.028Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 21,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 4,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T09:22:55.849Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 22,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 1,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T09:26:16.482Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 23,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 4,
+    "user_answer": "B",
+    "is_correct": true,
+    "answered_at": "2025-06-15T09:26:25.929Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 24,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 3,
+    "user_answer": "D",
+    "is_correct": false,
+    "answered_at": "2025-06-15T09:26:37.000Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 25,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 3,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T10:33:39.974Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 26,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 2,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T10:42:17.809Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 27,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 2,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T10:42:34.976Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 28,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 3,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T10:43:49.362Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 29,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 4,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T10:45:44.261Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 30,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 3,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T11:05:05.760Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 31,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 1,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T11:08:41.757Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 32,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 4,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T11:11:38.038Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 33,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 3,
+    "user_answer": "B",
+    "is_correct": false,
+    "answered_at": "2025-06-15T11:11:50.405Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 34,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 4,
+    "user_answer": "C",
+    "is_correct": false,
+    "answered_at": "2025-06-15T11:12:02.574Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 35,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 3,
+    "user_answer": "B",
+    "is_correct": false,
+    "answered_at": "2025-06-15T11:12:09.268Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 36,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 3,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T11:12:17.290Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 37,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 3,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T11:12:22.399Z"
+  }
+},
+{
+  "model": "quiz.quizresult",
+  "pk": 38,
+  "fields": {
+    "user": 3,
+    "quiz_type": "listening",
+    "question_id": 4,
+    "user_answer": "A",
+    "is_correct": false,
+    "answered_at": "2025-06-15T11:13:59.267Z"
+  }
+},
+{
+  "model": "quiz.dailymission",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "date": "2025-06-15",
+    "vocabulary_target": 5,
+    "grammar_target": 3,
+    "listening_target": 1,
+    "vocabulary_completed": 0,
+    "grammar_completed": 9,
+    "listening_completed": 0,
+    "is_completed": false,
+    "created_at": "2025-06-15T07:40:15.897Z",
+    "updated_at": "2025-06-15T08:50:18.783Z"
+  }
+},
+{
+  "model": "quiz.dailymission",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "date": "2025-06-15",
+    "vocabulary_target": 5,
+    "grammar_target": 3,
+    "listening_target": 1,
+    "vocabulary_completed": 7,
+    "grammar_completed": 0,
+    "listening_completed": 1,
+    "is_completed": false,
+    "created_at": "2025-06-15T07:46:13.046Z",
+    "updated_at": "2025-06-15T09:26:25.934Z"
+  }
 }
 ]

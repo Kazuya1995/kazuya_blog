@@ -1,0 +1,89 @@
+[
+{
+  "model": "time_tracker.taskcategory",
+  "pk": 1,
+  "fields": {
+    "name": "test",
+    "description": "",
+    "color": "#cccccc",
+    "created_at": "2025-06-08T15:43:02.322Z",
+    "updated_at": "2025-06-08T15:43:02.322Z"
+  }
+},
+{
+  "model": "time_tracker.taskcategory",
+  "pk": 2,
+  "fields": {
+    "name": "テストカテゴリ",
+    "description": "テスト用のカテゴリです",
+    "color": "#ff0000",
+    "created_at": "2025-06-11T03:05:05.452Z",
+    "updated_at": "2025-06-11T03:05:05.452Z"
+  }
+},
+{
+  "model": "time_tracker.task",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "title": "test",
+    "category": 1,
+    "estimated_minutes": 30,
+    "is_active": false,
+    "created_at": "2025-06-08T15:46:25.748Z",
+    "updated_at": "2025-06-08T15:46:25.748Z"
+  }
+},
+{
+  "model": "time_tracker.task",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "title": "テストタスク1",
+    "category": 2,
+    "estimated_minutes": 30,
+    "is_active": false,
+    "created_at": "2025-06-11T03:05:05.454Z",
+    "updated_at": "2025-06-11T03:05:05.454Z"
+  }
+},
+{
+  "model": "time_tracker.task",
+  "pk": 3,
+  "fields": {
+    "user": 2,
+    "title": "テストタスク2",
+    "category": 2,
+    "estimated_minutes": 45,
+    "is_active": false,
+    "created_at": "2025-06-11T03:05:05.456Z",
+    "updated_at": "2025-06-11T03:05:05.456Z"
+  }
+},
+{
+  "model": "time_tracker.task",
+  "pk": 4,
+  "fields": {
+    "user": 3,
+    "title": "test",
+    "category": 2,
+    "estimated_minutes": 30,
+    "is_active": true,
+    "created_at": "2025-06-11T03:08:57.245Z",
+    "updated_at": "2025-06-11T10:18:10.209Z"
+  }
+},
+{
+  "model": "time_tracker.taskexecutionlog",
+  "pk": 1,
+  "fields": {
+    "task": 4,
+    "start_time": "2025-06-11T10:18:10.211Z",
+    "end_time": null,
+    "actual_minutes": null,
+    "notes": "",
+    "created_at": "2025-06-11T10:18:10.211Z",
+    "updated_at": "2025-06-11T10:18:10.211Z"
+  }
+}
+]
