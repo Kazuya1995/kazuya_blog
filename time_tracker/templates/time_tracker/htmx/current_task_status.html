@@ -1,0 +1,74 @@
+{% if current_task %}
+    <div class="position-fixed bottom-0 end-0 m-3" style="z-index: 1000;">
+        <div class="card shadow" style="min-width: 300px;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1">{{ current_task.title }}</h6>
+                        {% if current_task.category %}
+                            <span class="badge" style="background-color: {{ current_task.category.color }}">
+                                {{ current_task.category.name }}
+                            </span>
+                        {% endif %}
+                    </div>
+                    <div class="text-end">
+                        <div class="current-task-timer text-primary" id="floating-timer">
+                            {% if duration_seconds %}
+                                {{ duration_seconds|floatformat:0 }}秒
+                            {% else %}
+                                00:00:00
+                            {% endif %}
+                        </div>
+                        <button class="btn btn-danger btn-sm mt-1" 
+                                hx-post="{% url 'time_tracker:stop_task' current_task.pk %}"
+                                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                                hx-target="#current-task-status"
+                                hx-swap="outerHTML"
+                                hx-confirm="タスクを停止しますか？">
+                            <i class="bi bi-stop"></i> 停止
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+    
+    <script>
+        // フローティングタイマーの更新
+        (function() {
+            const timerElement = document.getElementById('floating-timer');
+            if (timerElement) {
+                let seconds = {{ duration_seconds|default:0 }};
+                
+                function updateFloatingTimer() {
+                    seconds++;
+                    const hours = Math.floor(seconds / 3600);
+                    const minutes = Math.floor((seconds % 3600) / 60);
+                    const secs = seconds % 60;
+                    
+                    timerElement.textContent = 
+                        String(hours).padStart(2, '0') + ':' + 
+                        String(minutes).padStart(2, '0') + ':' + 
+                        String(secs).padStart(2, '0');
+                }
+                
+                // 既存のタイマーをクリア
+                if (window.floatingTimerInterval) {
+                    clearInterval(window.floatingTimerInterval);
+                }
+                
+                // 新しいタイマーを開始
+                window.floatingTimerInterval = setInterval(updateFloatingTimer, 1000);
+            }
+        })();
+    </script>
+{% else %}
+    <script>
+        // タスクが停止された場合、タイマーをクリア
+        if (window.floatingTimerInterval) {
+            clearInterval(window.floatingTimerInterval);
+            window.floatingTimerInterval = null;
+        }
+    </script>
+{% endif %}

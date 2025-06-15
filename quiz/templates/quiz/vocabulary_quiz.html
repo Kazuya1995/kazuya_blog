@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}単語クイズ - TOEIC学習{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">単語クイズ</h5>
+
+                </div>
+                <div class="card-body">
+                    <div id="quiz-content">
+                        <div class="mb-4">
+                            <h4 class="text-center mb-3">次の単語の意味を選んでください</h4>
+                            <div class="text-center mb-4">
+                                <h2 class="text-primary">{{ vocabulary.word }}</h2>
+                                {% if vocabulary.pronunciation %}
+                                    <p class="text-muted">{{ vocabulary.pronunciation }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <form id="quiz-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="quiz_type" value="vocabulary">
+                            <input type="hidden" name="question_id" value="{{ vocabulary.id }}">
+                            <input type="hidden" name="correct_choice" value="{{ correct_choice }}">
+                            
+                            <div class="row">
+                                {% for choice_key, choice_value in choices.items %}
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="answer" 
+                                                   id="choice_{{ choice_key }}" value="{{ choice_key }}">
+                                            <label class="form-check-label w-100" for="choice_{{ choice_key }}">
+                                                <div class="card choice-card">
+                                                    <div class="card-body text-center">
+                                                        <strong>{{ choice_key }}.</strong> {{ choice_value }}
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">回答する</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- 結果表示エリア -->
+                    <div id="result-content" style="display: none;">
+                        <div id="result-message" class="text-center mb-4"></div>
+                        <div id="explanation" class="alert" style="display: none;"></div>
+                        <div class="text-center">
+                            <button onclick="location.reload()" class="btn btn-primary me-2">次の問題</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.choice-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #dee2e6;
+}
+
+.choice-card:hover {
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0,123,255,0.25);
+}
+
+.form-check-input:checked + .form-check-label .choice-card {
+    border-color: #007bff;
+    background-color: #e7f3ff;
+}
+
+.choice-card.correct {
+    border-color: #28a745 !important;
+    background-color: #d4edda !important;
+}
+
+.choice-card.incorrect {
+    border-color: #dc3545 !important;
+    background-color: #f8d7da !important;
+}
+</style>
+
+<script>
+document.getElementById('quiz-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const submitBtn = document.getElementById('submit-btn');
+    
+    // ボタンを無効化
+    submitBtn.disabled = true;
+    submitBtn.textContent = '送信中...';
+    
+    fetch('{% url "quiz:submit_answer" %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        showResult(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('エラーが発生しました。もう一度お試しください。');
+        submitBtn.disabled = false;
+        submitBtn.textContent = '回答する';
+    });
+});
+
+function showResult(data) {
+    // クイズフォームを非表示
+    document.getElementById('quiz-content').style.display = 'none';
+    
+    // 結果を表示
+    const resultContent = document.getElementById('result-content');
+    const resultMessage = document.getElementById('result-message');
+    const explanation = document.getElementById('explanation');
+    
+    if (data.is_correct) {
+        resultMessage.innerHTML = '<div class="alert alert-success"><i class="fas fa-check-circle"></i> 正解です！</div>';
+    } else {
+        resultMessage.innerHTML = '<div class="alert alert-danger"><i class="fas fa-times-circle"></i> 不正解です</div>';
+    }
+    
+    if (data.explanation) {
+        explanation.innerHTML = data.explanation.replace(/\n/g, '<br>');
+        explanation.className = data.is_correct ? 'alert alert-info' : 'alert alert-warning';
+        explanation.style.display = 'block';
+    }
+    
+    resultContent.style.display = 'block';
+    
+    // 選択肢にスタイルを適用
+    const choices = document.querySelectorAll('.choice-card');
+    const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+    
+    choices.forEach(card => {
+        const input = card.closest('.form-check').querySelector('input');
+        if (input.value === data.correct_answer) {
+            card.classList.add('correct');
+        } else if (selectedAnswer && input.value === selectedAnswer.value && !data.is_correct) {
+            card.classList.add('incorrect');
+        }
+    });
+}
+</script>
+{% endblock %}

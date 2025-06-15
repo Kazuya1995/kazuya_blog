@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}学習進捗 - TOEIC学習{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>学習進捗</h1>
+    
+            </div>
+        </div>
+    </div>
+    
+    <!-- 総合スコア -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <h2 class="display-4 mb-0">{{ progress.total_score }}</h2>
+                    <p class="lead mb-0">総合スコア</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 学習統計 -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-book fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">単語学習</h5>
+                    <h3 class="text-primary">{{ progress.vocabulary_completed.count }}</h3>
+                    <p class="text-muted">完了した単語数</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-language fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">文法学習</h5>
+                    <h3 class="text-success">{{ progress.grammar_completed.count }}</h3>
+                    <p class="text-muted">完了した文法問題数</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-headphones fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">リスニング学習</h5>
+                    <h3 class="text-info">{{ progress.listening_completed.count }}</h3>
+                    <p class="text-muted">完了したリスニング問題数</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 今週のミッション履歴 -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">今週のミッション履歴</h5>
+                </div>
+                <div class="card-body">
+                    {% if weekly_missions %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>日付</th>
+                                        <th>単語</th>
+                                        <th>文法</th>
+                                        <th>リスニング</th>
+                                        <th>ステータス</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for mission in weekly_missions %}
+                                        <tr>
+                                            <td>{{ mission.date|date:"m/d (D)" }}</td>
+                                            <td>
+                                                <span class="badge {% if mission.vocabulary_completed >= mission.vocabulary_target %}bg-success{% else %}bg-secondary{% endif %}">
+                                                    {{ mission.vocabulary_completed }}/{{ mission.vocabulary_target }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge {% if mission.grammar_completed >= mission.grammar_target %}bg-success{% else %}bg-secondary{% endif %}">
+                                                    {{ mission.grammar_completed }}/{{ mission.grammar_target }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge {% if mission.listening_completed >= mission.listening_target %}bg-success{% else %}bg-secondary{% endif %}">
+                                                    {{ mission.listening_completed }}/{{ mission.listening_target }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {% if mission.is_completed %}
+                                                    <span class="badge bg-success"><i class="fas fa-check"></i> 完了</span>
+                                                {% else %}
+                                                    <span class="badge bg-warning">進行中</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">まだミッションデータがありません。</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 最近の学習結果 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">最近の学習結果</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_results %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>日時</th>
+                                        <th>クイズタイプ</th>
+                                        <th>結果</th>
+                                        <th>回答</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for result in recent_results %}
+                                        <tr>
+                                            <td>{{ result.answered_at|date:"m/d H:i" }}</td>
+                                            <td>
+                                                {% if result.quiz_type == 'vocabulary' %}
+                                                    <span class="badge bg-primary">単語</span>
+                                                {% elif result.quiz_type == 'grammar' %}
+                                                    <span class="badge bg-success">文法</span>
+                                                {% elif result.quiz_type == 'listening' %}
+                                                    <span class="badge bg-info">リスニング</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if result.is_correct %}
+                                                    <span class="badge bg-success"><i class="fas fa-check"></i> 正解</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger"><i class="fas fa-times"></i> 不正解</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ result.user_answer }}</small>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">まだ学習結果がありません。クイズに挑戦してみましょう！</p>
+                        <div class="text-center">
+                            <a href="{% url 'quiz:dashboard' %}" class="btn btn-primary">クイズを始める</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

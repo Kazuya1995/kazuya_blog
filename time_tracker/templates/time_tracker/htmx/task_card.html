@@ -1,0 +1,63 @@
+<div class="card task-card h-100">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <h6 class="card-title mb-1">{{ task.title }}</h6>
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'time_tracker:task_update' task.pk %}">編集</a></li>
+                    <li><a class="dropdown-item text-danger" href="{% url 'time_tracker:task_delete' task.pk %}">削除</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        {% if task.category %}
+            <div class="mb-2">
+                <span class="category-color" style="background-color: {{ task.category.color }}"></span>
+                <small class="text-muted">{{ task.category.name }}</small>
+            </div>
+        {% endif %}
+        
+        <div class="row text-center mb-3">
+            <div class="col-6">
+                <div class="text-muted small">見積時間</div>
+                <div class="fw-bold">{{ task.estimated_minutes|default:"未設定" }}{% if task.estimated_minutes %}分{% endif %}</div>
+            </div>
+            <div class="col-6">
+                <div class="text-muted small">総実行時間</div>
+                <div class="fw-bold text-primary">{{ task.total_execution_time }}分</div>
+            </div>
+        </div>
+        
+        <div class="d-grid">
+            {% if task.is_active %}
+                <button class="btn btn-danger" 
+                        hx-post="{% url 'time_tracker:stop_task' task.pk %}"
+                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                        hx-target="closest .card"
+                        hx-swap="outerHTML"
+                        hx-confirm="タスクを停止しますか？">
+                    <i class="bi bi-stop-circle"></i> 停止
+                </button>
+            {% else %}
+                <button class="btn btn-success" 
+                        hx-post="{% url 'time_tracker:start_task' task.pk %}"
+                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                        hx-target="closest .card"
+                        hx-swap="outerHTML">
+                    <i class="bi bi-play"></i> 開始
+                </button>
+            {% endif %}
+        </div>
+        
+        {% if task.last_execution_date %}
+            <div class="mt-2">
+                <small class="text-muted">
+                    <i class="bi bi-clock"></i> 最終更新: {{ task.last_execution_date|date:"Y/m/d H:i" }}
+                </small>
+            </div>
+        {% endif %}
+    </div>
+</div>

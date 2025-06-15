@@ -1,0 +1,271 @@
+[
+{
+  "model": "quiz.vocabulary",
+  "pk": 1,
+  "fields": {
+    "word": "accomplish",
+    "pronunciation": "/əˈkʌmplɪʃ/",
+    "part_of_speech": "verb",
+    "meaning_jp": "達成する、成し遂げる",
+    "example": "We need to accomplish this task by Friday.",
+    "difficulty": "intermediate",
+    "created_at": "2025-06-15T07:39:16.412Z",
+    "updated_at": "2025-06-15T07:39:16.412Z"
+  }
+},
+{
+  "model": "quiz.vocabulary",
+  "pk": 2,
+  "fields": {
+    "word": "efficient",
+    "pronunciation": "/ɪˈfɪʃənt/",
+    "part_of_speech": "adjective",
+    "meaning_jp": "効率的な",
+    "example": "This new system is more efficient than the old one.",
+    "difficulty": "intermediate",
+    "created_at": "2025-06-15T07:39:16.414Z",
+    "updated_at": "2025-06-15T07:39:16.414Z"
+  }
+},
+{
+  "model": "quiz.vocabulary",
+  "pk": 3,
+  "fields": {
+    "word": "revenue",
+    "pronunciation": "/ˈrevənjuː/",
+    "part_of_speech": "noun",
+    "meaning_jp": "収益、歳入",
+    "example": "The company's revenue increased by 15% this year.",
+    "difficulty": "advanced",
+    "created_at": "2025-06-15T07:39:16.415Z",
+    "updated_at": "2025-06-15T07:39:16.415Z"
+  }
+},
+{
+  "model": "quiz.vocabulary",
+  "pk": 4,
+  "fields": {
+    "word": "negotiate",
+    "pronunciation": "/nɪˈɡoʊʃieɪt/",
+    "part_of_speech": "verb",
+    "meaning_jp": "交渉する",
+    "example": "We need to negotiate the terms of the contract.",
+    "difficulty": "intermediate",
+    "created_at": "2025-06-15T07:39:16.416Z",
+    "updated_at": "2025-06-15T07:39:16.416Z"
+  }
+},
+{
+  "model": "quiz.vocabulary",
+  "pk": 5,
+  "fields": {
+    "word": "schedule",
+    "pronunciation": "/ˈskedʒuːl/",
+    "part_of_speech": "noun",
+    "meaning_jp": "スケジュール、予定",
+    "example": "Please check your schedule for next week.",
+    "difficulty": "beginner",
+    "created_at": "2025-06-15T07:39:16.418Z",
+    "updated_at": "2025-06-15T07:39:16.418Z"
+  }
+},
+{
+  "model": "quiz.vocabulary",
+  "pk": 6,
+  "fields": {
+    "word": "conference",
+    "pronunciation": "/ˈkɑːnfərəns/",
+    "part_of_speech": "noun",
+    "meaning_jp": "会議、協議会",
+    "example": "The annual conference will be held in Tokyo.",
+    "difficulty": "beginner",
+    "created_at": "2025-06-15T07:39:16.419Z",
+    "updated_at": "2025-06-15T07:39:16.419Z"
+  }
+},
+{
+  "model": "quiz.vocabulary",
+  "pk": 7,
+  "fields": {
+    "word": "implement",
+    "pronunciation": "/ˈɪmplɪment/",
+    "part_of_speech": "verb",
+    "meaning_jp": "実施する、実行する",
+    "example": "We will implement the new policy next month.",
+    "difficulty": "intermediate",
+    "created_at": "2025-06-15T07:39:16.421Z",
+    "updated_at": "2025-06-15T07:39:16.421Z"
+  }
+},
+{
+  "model": "quiz.vocabulary",
+  "pk": 8,
+  "fields": {
+    "word": "budget",
+    "pronunciation": "/ˈbʌdʒɪt/",
+    "part_of_speech": "noun",
+    "meaning_jp": "予算",
+    "example": "The project exceeded its budget.",
+    "difficulty": "beginner",
+    "created_at": "2025-06-15T07:39:16.422Z",
+    "updated_at": "2025-06-15T07:39:16.422Z"
+  }
+},
+{
+  "model": "quiz.grammarquestion",
+  "pk": 1,
+  "fields": {
+    "grammar": "",
+    "question": "The meeting has been _____ until next Friday.",
+    "choice_a": "postponed",
+    "choice_b": "postpone",
+    "choice_c": "postponing",
+    "choice_d": "to postpone",
+    "correct": "A",
+    "explanation": "受動態の現在完了形です。「has been + 過去分詞」の形になります。",
+    "difficulty": "intermediate",
+    "created_at": "2025-06-15T07:39:16.423Z",
+    "updated_at": "2025-06-15T07:39:16.423Z"
+  }
+},
+{
+  "model": "quiz.grammarquestion",
+  "pk": 2,
+  "fields": {
+    "grammar": "",
+    "question": "Please _____ me know if you need any assistance.",
+    "choice_a": "let",
+    "choice_b": "make",
+    "choice_c": "have",
+    "choice_d": "get",
+    "correct": "A",
+    "explanation": "「let someone know」は「〜に知らせる」という意味の熟語です。",
+    "difficulty": "beginner",
+    "created_at": "2025-06-15T07:39:16.424Z",
+    "updated_at": "2025-06-15T07:39:16.424Z"
+  }
+},
+{
+  "model": "quiz.grammarquestion",
+  "pk": 3,
+  "fields": {
+    "grammar": "",
+    "question": "The report must be submitted _____ the end of this week.",
+    "choice_a": "by",
+    "choice_b": "until",
+    "choice_c": "at",
+    "choice_d": "in",
+    "correct": "A",
+    "explanation": "「by」は期限を表す前置詞で、「〜までに」という意味です。",
+    "difficulty": "intermediate",
+    "created_at": "2025-06-15T07:39:16.425Z",
+    "updated_at": "2025-06-15T07:39:16.425Z"
+  }
+},
+{
+  "model": "quiz.grammarquestion",
+  "pk": 4,
+  "fields": {
+    "grammar": "",
+    "question": "She is _____ experienced manager in our department.",
+    "choice_a": "the most",
+    "choice_b": "more",
+    "choice_c": "most",
+    "choice_d": "much",
+    "correct": "A",
+    "explanation": "最上級の形です。「the most + 形容詞」で最上級を表します。",
+    "difficulty": "beginner",
+    "created_at": "2025-06-15T07:39:16.426Z",
+    "updated_at": "2025-06-15T07:39:16.426Z"
+  }
+},
+{
+  "model": "quiz.grammarquestion",
+  "pk": 5,
+  "fields": {
+    "grammar": "",
+    "question": "The new software will _____ our productivity significantly.",
+    "choice_a": "improve",
+    "choice_b": "improvement",
+    "choice_c": "improving",
+    "choice_d": "improved",
+    "correct": "A",
+    "explanation": "助動詞「will」の後には動詞の原形が来ます。",
+    "difficulty": "beginner",
+    "created_at": "2025-06-15T07:39:16.428Z",
+    "updated_at": "2025-06-15T07:39:16.428Z"
+  }
+},
+{
+  "model": "quiz.listeningquestion",
+  "pk": 1,
+  "fields": {
+    "audio_text": "Good morning, this is Sarah from the marketing department. I'm calling to confirm our meeting scheduled for tomorrow at 2 PM.",
+    "question": "What is the purpose of this call?",
+    "choice_a": "To schedule a new meeting",
+    "choice_b": "To confirm an existing meeting",
+    "choice_c": "To cancel a meeting",
+    "choice_d": "To change the meeting time",
+    "correct": "B",
+    "explanation": "",
+    "audio_file": "listening_audio/listening_1.wav",
+    "difficulty": "beginner",
+    "created_at": "2025-06-15T07:39:16.429Z",
+    "updated_at": "2025-06-15T09:12:56.271Z"
+  }
+},
+{
+  "model": "quiz.listeningquestion",
+  "pk": 2,
+  "fields": {
+    "audio_text": "Attention passengers, flight 245 to New York has been delayed by 30 minutes due to weather conditions. The new departure time is 3:45 PM.",
+    "question": "Why has the flight been delayed?",
+    "choice_a": "Technical problems",
+    "choice_b": "Weather conditions",
+    "choice_c": "Security issues",
+    "choice_d": "Air traffic control",
+    "correct": "B",
+    "explanation": "",
+    "audio_file": "listening_audio/listening_2.wav",
+    "difficulty": "intermediate",
+    "created_at": "2025-06-15T07:39:16.430Z",
+    "updated_at": "2025-06-15T09:22:09.417Z"
+  }
+},
+{
+  "model": "quiz.listeningquestion",
+  "pk": 3,
+  "fields": {
+    "audio_text": "Thank you for calling TechSupport. All our representatives are currently busy helping other customers. Your estimated wait time is 5 minutes.",
+    "question": "What is the caller being told?",
+    "choice_a": "The office is closed",
+    "choice_b": "They need to call back later",
+    "choice_c": "They need to wait 5 minutes",
+    "choice_d": "Their call cannot be answered",
+    "correct": "C",
+    "explanation": "",
+    "audio_file": "listening_audio/listening_3.wav",
+    "difficulty": "beginner",
+    "created_at": "2025-06-15T07:39:16.431Z",
+    "updated_at": "2025-06-15T09:27:00.917Z"
+  }
+},
+{
+  "model": "quiz.listeningquestion",
+  "pk": 4,
+  "fields": {
+    "audio_text": "The quarterly sales report shows a 12% increase compared to last quarter. This growth is primarily due to our new product line and improved customer service.",
+    "question": "What contributed to the sales increase?",
+    "choice_a": "Lower prices",
+    "choice_b": "New product line and better service",
+    "choice_c": "More advertising",
+    "choice_d": "Seasonal factors",
+    "correct": "B",
+    "explanation": "",
+    "audio_file": "listening_audio/listening_4.wav",
+    "difficulty": "intermediate",
+    "created_at": "2025-06-15T07:39:16.432Z",
+    "updated_at": "2025-06-15T09:27:13.330Z"
+  }
+}
+]

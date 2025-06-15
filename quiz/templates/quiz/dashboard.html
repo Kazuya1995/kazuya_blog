@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ダッシュボード{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    
+    <!-- 今日のミッション -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">今日のミッション</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="me-3" style="min-width: 80px;">単語</span>
+                            <div class="progress flex-grow-1 me-3">
+                                <div class="progress-bar bg-primary" role="progressbar" 
+                                     style="width: {% widthratio daily_mission.vocabulary_completed daily_mission.vocabulary_target 100 %}%">
+                                </div>
+                            </div>
+                            <small class="text-muted">{{ daily_mission.vocabulary_completed }}/{{ daily_mission.vocabulary_target }}</small>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="me-3" style="min-width: 80px;">文法</span>
+                            <div class="progress flex-grow-1 me-3">
+                                <div class="progress-bar bg-success" role="progressbar" 
+                                     style="width: {% widthratio daily_mission.grammar_completed daily_mission.grammar_target 100 %}%">
+                                </div>
+                            </div>
+                            <small class="text-muted">{{ daily_mission.grammar_completed }}/{{ daily_mission.grammar_target }}</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="me-3" style="min-width: 80px;">リスニング</span>
+                            <div class="progress flex-grow-1 me-3">
+                                <div class="progress-bar bg-info" role="progressbar" 
+                                     style="width: {% widthratio daily_mission.listening_completed daily_mission.listening_target 100 %}%">
+                                </div>
+                            </div>
+                            <small class="text-muted">{{ daily_mission.listening_completed }}/{{ daily_mission.listening_target }}</small>
+                        </div>
+                    </div>
+                    {% if daily_mission.is_completed %}
+                        <div class="alert alert-success text-center">
+                            <i class="fas fa-trophy"></i> 今日のミッション完了！おめでとうございます！
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- クイズメニュー -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3 class="mb-3">クイズメニュー</h3>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- 単語クイズ -->
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-book fa-2x text-primary me-3"></i>
+                        <h5 class="card-title mb-0">単語クイズ</h5>
+                    </div>
+                    <a href="{% url 'quiz:vocabulary_quiz' %}" class="btn btn-outline-primary btn-sm">開始</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 文法クイズ -->
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-language fa-2x text-success me-3"></i>
+                        <h5 class="card-title mb-0">文法クイズ</h5>
+                    </div>
+                    <a href="{% url 'quiz:grammar_quiz' %}" class="btn btn-outline-success btn-sm">開始</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- リスニングクイズ -->
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-headphones fa-2x text-info me-3"></i>
+                        <h5 class="card-title mb-0">リスニングクイズ</h5>
+                    </div>
+                    <a href="{% url 'quiz:listening_quiz' %}" class="btn btn-outline-info btn-sm">開始</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 学習進捗 -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">学習進捗</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>総スコア:</strong> {{ progress.total_score }}点</p>
+                    <p><strong>完了した単語:</strong> {{ progress.vocabulary_completed.count }}</p>
+                    <p><strong>完了した文法:</strong> {{ progress.grammar_completed.count }}</p>
+                    <p><strong>完了したリスニング:</strong> {{ progress.listening_completed.count }}</p>
+                    <a href="{% url 'quiz:progress' %}" class="btn btn-outline-primary">詳細を見る</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">最近の結果</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_results %}
+                        <div class="list-group list-group-flush">
+                            {% for result in recent_results|slice:":5" %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <small class="text-muted">{{ result.quiz_type|capfirst }}</small><br>
+                                        <small>{{ result.answered_at|date:"m/d H:i" }}</small>
+                                    </div>
+                                    {% if result.is_correct %}
+                                        <span class="badge bg-success">正解</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">不正解</span>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">まだクイズに挑戦していません。</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

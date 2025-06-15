@@ -1,0 +1,311 @@
+{% extends 'time_tracker/base.html' %}
+{% load static %}
+
+{% block title %}実行ログ一覧{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="bi bi-clock-history"></i> 実行ログ一覧
+                </h2>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+                        <i class="bi bi-funnel"></i> フィルター
+                    </button>
+                    <a href="{% url 'time_tracker:dashboard' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-house"></i> ダッシュボード
+                    </a>
+                </div>
+            </div>
+            
+            <!-- フィルター -->
+            <div class="collapse mb-4" id="filterCollapse">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="get" class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">期間</label>
+                                <select name="period" class="form-select">
+                                    <option value="">すべて</option>
+                                    <option value="today">今日</option>
+                                    <option value="week">今週</option>
+                                    <option value="month">今月</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">カテゴリ</label>
+                                <select name="category" class="form-select">
+                                    <option value="">すべて</option>
+                                    <!-- カテゴリオプションはビューで追加 -->
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">タスク</label>
+                                <input type="text" name="task" class="form-control" placeholder="タスク名で検索">
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="bi bi-search"></i> 検索
+                                </button>
+                                <a href="{% url 'time_tracker:log_list' %}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-clockwise"></i> リセット
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            {% if logs %}
+            <!-- 統計サマリー -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">{{ logs|length }}</h5>
+                            <p class="card-text small text-muted">総ログ数</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-success">{{ total_time|floatformat:0 }}分</h5>
+                            <p class="card-text small text-muted">総実行時間</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-info">{{ avg_time|floatformat:1 }}分</h5>
+                            <p class="card-text small text-muted">平均実行時間</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-warning">{{ unique_tasks }}</h5>
+                            <p class="card-text small text-muted">実行タスク数</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ログ一覧 -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-list-ul"></i> 実行ログ
+                        <small class="text-muted">({{ logs|length }}件)</small>
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>タスク</th>
+                                    <th>カテゴリ</th>
+                                    <th>開始時刻</th>
+                                    <th>終了時刻</th>
+                                    <th>実行時間</th>
+                                    <th>状態</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for log in logs %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <h6 class="mb-0">
+                                                    <a href="{% url 'time_tracker:task_detail' log.task.pk %}" class="text-decoration-none">
+                                                        {{ log.task.title }}
+                                                    </a>
+                                                </h6>
+                                                {% if log.task.estimated_minutes %}
+                                                <small class="text-muted">見積: {{ log.task.estimated_minutes }}分</small>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if log.task.category %}
+                                        <span class="badge rounded-pill" style="background-color: {{ log.task.category.color }}; color: white;">
+                                            {{ log.task.category.name }}
+                                        </span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">未分類</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div>{{ log.start_time|date:"m/d" }}</div>
+                                            <small class="text-muted">{{ log.start_time|time:"H:i" }}</small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if log.end_time %}
+                                        <div>
+                                            <div>{{ log.end_time|date:"m/d" }}</div>
+                                            <small class="text-muted">{{ log.end_time|time:"H:i" }}</small>
+                                        </div>
+                                        {% else %}
+                                        <span class="badge bg-success">実行中</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if log.end_time %}
+                                        <div class="d-flex align-items-center">
+                                            <span class="fw-bold">{{ log.duration_minutes|floatformat:0 }}分</span>
+                                            {% if log.task.estimated_minutes %}
+                                            <small class="text-muted ms-2">
+                                                ({{ log.efficiency_percentage|floatformat:0 }}%)
+                                            </small>
+                                            {% endif %}
+                                        </div>
+                                        {% else %}
+                                        <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if log.end_time %}
+                                        <span class="badge bg-primary">完了</span>
+                                        {% else %}
+                                        <span class="badge bg-success">実行中</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="bi bi-three-dots"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" href="{% url 'time_tracker:log_detail' log.pk %}">
+                                                        <i class="bi bi-eye"></i> 詳細
+                                                    </a>
+                                                </li>
+                                                {% if log.end_time %}
+                                                <li>
+                                                    <a class="dropdown-item" href="{% url 'time_tracker:log_update' log.pk %}">
+                                                        <i class="bi bi-pencil"></i> 編集
+                                                    </a>
+                                                </li>
+                                                {% endif %}
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <a class="dropdown-item" href="{% url 'time_tracker:task_detail' log.task.pk %}">
+                                                        <i class="bi bi-box-arrow-up-right"></i> タスク詳細
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ページネーション -->
+            {% if is_paginated %}
+            <nav aria-label="ログページネーション" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">
+                                <i class="bi bi-chevron-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                                <i class="bi bi-chevron-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            
+            {% else %}
+            <!-- ログがない場合 -->
+            <div class="text-center py-5">
+                <i class="bi bi-clock-history display-1 text-muted"></i>
+                <h4 class="mt-3 text-muted">実行ログがまだありません</h4>
+                <p class="text-muted">タスクを実行すると、ここに履歴が表示されます</p>
+                <a href="{% url 'time_tracker:dashboard' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-play-circle"></i> タスクを開始
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.btn {
+    border-radius: 8px;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: #495057;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.badge {
+    font-size: 0.75em;
+}
+
+.table-responsive {
+    border-radius: 0 0 12px 12px;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+}
+
+.collapse .card {
+    border: 1px solid #e9ecef;
+}
+</style>
+{% endblock %}

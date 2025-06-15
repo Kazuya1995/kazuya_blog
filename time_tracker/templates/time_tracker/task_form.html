@@ -1,0 +1,167 @@
+{% extends 'time_tracker/base.html' %}
+
+{% block title %}
+    {% if object %}
+        タスク編集 - TimeTracker
+    {% else %}
+        タスク作成 - TimeTracker
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    {% if object %}
+                        <i class="bi bi-pencil"></i> タスク編集
+                    {% else %}
+                        <i class="bi bi-plus"></i> 新しいタスク
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.title.id_for_label }}" class="form-label">
+                            {{ form.title.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.title.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.category.id_for_label }}" class="form-label">
+                            {{ form.category.label }}
+                        </label>
+                        {{ form.category }}
+                        {% if form.category.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.category.errors.0 }}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">
+                            <a href="{% url 'time_tracker:category_create' %}" class="text-decoration-none">
+                                <i class="bi bi-plus"></i> 新しいカテゴリを作成
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.estimated_minutes.id_for_label }}" class="form-label">
+                            {{ form.estimated_minutes.label }}
+                        </label>
+                        <div class="input-group">
+                            {{ form.estimated_minutes }}
+                            <span class="input-group-text">分</span>
+                        </div>
+                        {% if form.estimated_minutes.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.estimated_minutes.errors.0 }}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">
+                            このタスクにかかると予想される時間を入力してください（任意）
+                        </div>
+                    </div>
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'time_tracker:task_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> キャンセル
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            {% if object %}
+                                <i class="bi bi-check"></i> 更新
+                            {% else %}
+                                <i class="bi bi-plus"></i> 作成
+                            {% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        {% if object %}
+            <!-- タスクの実行履歴 -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clock-history"></i> 実行履歴
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if object.taskexecutionlog_set.all %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>開始時刻</th>
+                                        <th>終了時刻</th>
+                                        <th>実行時間</th>
+                                        <th>メモ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for log in object.taskexecutionlog_set.all|slice:":10" %}
+                                        <tr>
+                                            <td>{{ log.start_time|date:"m/d H:i" }}</td>
+                                            <td>
+                                                {% if log.end_time %}
+                                                    {{ log.end_time|date:"m/d H:i" }}
+                                                {% else %}
+                                                    <span class="badge bg-success">実行中</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if log.end_time %}
+                                                    {{ log.duration_display }}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if log.notes %}
+                                                    <span class="text-truncate d-inline-block" style="max-width: 150px;" title="{{ log.notes }}">
+                                                        {{ log.notes }}
+                                                    </span>
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if object.taskexecutionlog_set.count > 10 %}
+                            <div class="text-center mt-3">
+                                <a href="{% url 'time_tracker:task_detail' object.pk %}" class="btn btn-outline-primary btn-sm">
+                                    すべての履歴を見る
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center text-muted py-3">
+                            <p>まだ実行履歴がありません</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

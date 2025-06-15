@@ -22,6 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
+    'time_tracker.apps.TimeTrackerConfig',
+    'quiz.apps.QuizConfig',
     'markdownx',
     'ckeditor',
     'ckeditor_uploader',
@@ -158,3 +160,8 @@ CKEDITOR_CONFIGS = {
         'versionCheck': False,
     }
 }
+
+# ログイン設定
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'

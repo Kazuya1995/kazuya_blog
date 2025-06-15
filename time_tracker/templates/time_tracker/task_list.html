@@ -1,0 +1,156 @@
+{% extends 'time_tracker/base.html' %}
+
+{% block title %}タスク一覧 - TimeTracker{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>
+        <i class="bi bi-list-task"></i> タスク一覧
+    </h2>
+    <a href="{% url 'time_tracker:task_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus"></i> 新しいタスク
+    </a>
+</div>
+
+{% if tasks %}
+    <div class="row">
+        {% for task in tasks %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card task-card h-100 {% if task.is_active %}border-success{% endif %}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title mb-0">
+                                <a href="{% url 'time_tracker:task_detail' task.pk %}" class="text-decoration-none">
+                                    {{ task.title }}
+                                </a>
+                                {% if task.is_active %}
+                                    <span class="badge bg-success ms-2">
+                                        <i class="bi bi-play-fill"></i> 実行中
+                                    </span>
+                                {% endif %}
+                            </h5>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'time_tracker:task_detail' task.pk %}">
+                                            <i class="bi bi-eye"></i> 詳細
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'time_tracker:task_update' task.pk %}">
+                                            <i class="bi bi-pencil"></i> 編集
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" href="{% url 'time_tracker:task_delete' task.pk %}">
+                                            <i class="bi bi-trash"></i> 削除
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        {% if task.category %}
+                            <div class="mb-2">
+                                <span class="category-color" style="background-color: {{ task.category.color }}"></span>
+                                <small class="text-muted">{{ task.category.name }}</small>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="row text-center mb-3">
+                            <div class="col-6">
+                                <div class="text-muted small">見積時間</div>
+                                <div class="fw-bold">
+                                    {% if task.estimated_minutes %}
+                                        {{ task.estimated_minutes }}分
+                                    {% else %}
+                                        未設定
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-muted small">総実行時間</div>
+                                <div class="fw-bold text-primary">{{ task.total_execution_time }}分</div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            {% if task.is_active %}
+                                <button class="btn btn-danger" 
+                                        hx-post="{% url 'time_tracker:stop_task' task.pk %}"
+                                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                                        hx-target="closest .card"
+                                        hx-swap="outerHTML"
+                                        hx-confirm="タスクを停止しますか？">
+                                    <i class="bi bi-stop-circle"></i> 停止
+                                </button>
+                            {% else %}
+                                <button class="btn btn-success" 
+                                        hx-post="{% url 'time_tracker:start_task' task.pk %}"
+                                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                                    <i class="bi bi-play-circle"></i> 開始
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted small">
+                        <i class="bi bi-clock"></i> 最終更新: {{ task.updated_at|date:"Y/m/d H:i" }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- ページネーション -->
+    {% if is_paginated %}
+        <nav aria-label="タスク一覧ページネーション">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">
+                            <i class="bi bi-chevron-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                {% endif %}
+                
+                <li class="page-item active">
+                    <span class="page-link">
+                        {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                    </span>
+                </li>
+                
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                            <i class="bi bi-chevron-double-right"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-inbox display-1 text-muted mb-4"></i>
+        <h4 class="text-muted mb-3">タスクがありません</h4>
+        <p class="text-muted mb-4">最初のタスクを作成して時間管理を始めましょう！</p>
+        <a href="{% url 'time_tracker:task_create' %}" class="btn btn-primary btn-lg">
+            <i class="bi bi-plus"></i> タスクを作成
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

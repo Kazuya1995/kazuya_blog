@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LOG Loop{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .timeline-container {
+            height: 600px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+        }
+        
+        .timeline-hour {
+            height: 60px;
+            border-bottom: 1px solid #e9ecef;
+            position: relative;
+        }
+        
+        .timeline-task {
+            position: absolute;
+            left: 60px;
+            right: 10px;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 0.875rem;
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .current-task-timer {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .task-card {
+            transition: transform 0.2s;
+        }
+        
+        .task-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .category-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- ナビゲーションバー -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-infinity me-2"></i>ImpLoop
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'time_tracker:dashboard' %}">
+                            <i class="bi bi-house"></i> LOG ホーム
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'time_tracker:task_list' %}">
+                            <i class="bi bi-list-task"></i> タスク
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'time_tracker:category_list' %}">
+                            <i class="bi bi-tags"></i> カテゴリ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'time_tracker:log_list' %}">
+                            <i class="bi bi-journal-text"></i> ログ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/blog/">
+                            <i class="fas fa-blog me-1"></i>ImpLoop Blog
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/quiz/">
+                            <i class="fas fa-graduation-cap me-1"></i>Eng Loop
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="alert('MUSC Loop は開発中です')">
+                            <i class="fas fa-dumbbell me-1"></i>MUSC Loop
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle"></i> {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% if user.is_staff %}
+                                    <li><a class="dropdown-item" href="{% url 'admin:index' %}">管理画面</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                {% endif %}
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">ログアウト</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">ログイン</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- メッセージ表示 -->
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <!-- メインコンテンツ -->
+    <main class="container my-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    <!-- 現在のタスク状況（固定表示） -->
+    <div id="current-task-status" 
+         hx-get="{% url 'time_tracker:current_task_status' %}" 
+         hx-trigger="load, every 1s">
+        <!-- HTMX で動的に更新される -->
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- 通知機能 -->
+    <script>
+        // ブラウザ通知の許可を求める
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+        
+        // タスク開始/停止時の通知
+        function showNotification(title, message) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, {
+                    body: message,
+                    icon: '/static/favicon.ico'
+                });
+            }
+        }
+        
+        // HTMX イベントリスナー
+        document.addEventListener('htmx:afterRequest', function(event) {
+            if (event.detail.xhr.status === 204) {
+                // タスクの開始/停止が成功した場合、現在のタスク状況を更新
+                htmx.trigger('#current-task-status', 'load');
+            }
+        });
+    </script>
+    
+    <!-- フッター -->
+    <footer class="bg-dark text-light mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-infinity me-2"></i>ImpLoop</h5>
+                    <p class="mb-2">効率化のループを回すため、小さな改善の機会を継続的に提供する。</p>
+                </div>
+                <div class="col-md-4">
+                    <h6>サービス一覧</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/blog/" class="text-light text-decoration-none"><i class="fas fa-blog me-1"></i>ImpLoop Blog</a></li>
+                        <li><a href="/quiz/" class="text-light text-decoration-none"><i class="fas fa-graduation-cap me-1"></i>Eng Loop</a></li>
+                        <li><a href="/time-tracker/" class="text-light text-decoration-none"><i class="fas fa-tasks me-1"></i>LOG Loop</a></li>
+                        <li><a href="#" class="text-light text-decoration-none" onclick="alert('MUSC Loop は開発中です')"><i class="fas fa-dumbbell me-1"></i>MUSC Loop</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <p class="mb-0">&copy; 2025 ImpLoop. All rights reserved.</p>
+                    <small class="text-muted">継続的改善で理想の自分へ</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

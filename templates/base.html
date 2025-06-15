@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ImpLoop{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 2rem 0;
+            padding-bottom: 280px; /* 選択肢とフッターのスペース確保 */
+        }
+        
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 1rem 0;
+            margin-top: auto;
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            transition: box-shadow 0.15s ease-in-out;
+        }
+        
+        .card:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        
+        /* Extra CSS will be inserted here by child templates */
+    </style>
+</head>
+<body>
+    <!-- ナビゲーションバー -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            {% if request.resolver_match.app_name == 'quiz' %}
+                <a class="navbar-brand" href="/quiz/">
+                    <i class="fas fa-graduation-cap me-2"></i>Eng Loop
+                </a>
+                <!-- Eng Loop用のアカウント表示 -->
+                {% if user.is_authenticated %}
+                    <div class="d-flex align-items-center me-3">
+                        <i class="fas fa-user-circle me-2 text-light" style="font-size: 1.2rem;"></i>
+                        <span class="text-light d-none d-md-inline">{{ user.username }}</span>
+                    </div>
+                {% endif %}
+            {% else %}
+                <a class="navbar-brand" href="/">
+                    <i class="fas fa-infinity me-2"></i>ImpLoop
+                </a>
+            {% endif %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/blog/">
+                            <i class="fas fa-blog me-1"></i>ImpLoop Blog
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/quiz/">
+                            <i class="fas fa-graduation-cap me-1"></i>Eng Loop
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/time-tracker/">
+                            <i class="fas fa-tasks me-1"></i>LOG Loop
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="alert('MUSC Loop は開発中です')">
+                            <i class="fas fa-dumbbell me-1"></i>MUSC Loop
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i>{{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/admin/"><i class="fas fa-cog me-1"></i>管理画面</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    {% if request.resolver_match.app_name == 'quiz' %}
+                                        <a class="dropdown-item" href="{% url 'quiz:logout' %}"><i class="fas fa-sign-out-alt me-1"></i>ログアウト</a>
+                                    {% else %}
+                                        <a class="dropdown-item" href="/accounts/logout/"><i class="fas fa-sign-out-alt me-1"></i>ログアウト</a>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            {% if request.resolver_match.app_name == 'quiz' %}
+                                <a class="nav-link" href="{% url 'quiz:login' %}">
+                                    <i class="fas fa-sign-in-alt me-1"></i>ログイン
+                                </a>
+                            {% else %}
+                                <a class="nav-link" href="/accounts/login/">
+                                    <i class="fas fa-sign-in-alt me-1"></i>ログイン
+                                </a>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <div class="container">
+            <!-- メッセージ表示 -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="container">
+            <!-- スマホ表示時はシンプルなフッター -->
+            <div class="d-block d-md-none text-center">
+                <h5><i class="fas fa-infinity me-2"></i>ImpLoop</h5>
+            </div>
+            
+            <!-- デスクトップ表示時は詳細なフッター -->
+            <div class="d-none d-md-block">
+                <div class="row">
+                    <div class="col-md-4">
+                        {% if request.resolver_match.app_name == 'quiz' %}
+                            <h5><i class="fas fa-graduation-cap me-2"></i>Eng Loop</h5>
+                            <p class="mb-2">英語学習のループを回すため、継続的な学習機会を提供する。</p>
+                        {% else %}
+                            <h5><i class="fas fa-infinity me-2"></i>ImpLoop</h5>
+                            <p class="mb-2">効率化のループを回すため、小さな改善の機会を継続的に提供する。</p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <h6>サービス一覧</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="/blog/" class="text-light text-decoration-none"><i class="fas fa-blog me-1"></i>ImpLoop Blog</a></li>
+                            <li><a href="/quiz/" class="text-light text-decoration-none"><i class="fas fa-graduation-cap me-1"></i>Eng Loop</a></li>
+                            <li><a href="/time-tracker/" class="text-light text-decoration-none"><i class="fas fa-tasks me-1"></i>LOG Loop</a></li>
+                            <li><a href="#" class="text-light text-decoration-none" onclick="alert('MUSC Loop は開発中です')"><i class="fas fa-dumbbell me-1"></i>MUSC Loop</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        {% if request.resolver_match.app_name == 'quiz' %}
+                            <p class="mb-0">&copy; 2025 Eng Loop. All rights reserved.</p>
+                            <small class="text-muted">継続的学習で理想の英語力へ</small>
+                        {% else %}
+                            <p class="mb-0">&copy; 2025 ImpLoop. All rights reserved.</p>
+                            <small class="text-muted">継続的改善で理想の自分へ</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

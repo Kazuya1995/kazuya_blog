@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}技術ブログ{% endblock %}</title>
+    <title>{% block title %}ImpLoop Blog{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- シンタックスハイライト用のCSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -147,14 +147,33 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'blog:post_list' %}">技術ブログ</a>
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-infinity me-2"></i>ImpLoop
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'blog:post_list' %}">記事一覧</a>
+                        <a class="nav-link" href="{% url 'blog:post_list' %}">
+                            <i class="fas fa-home me-1"></i>ブログホーム
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/quiz/">
+                            <i class="fas fa-graduation-cap me-1"></i>Eng Loop
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/time-tracker/">
+                            <i class="fas fa-tasks me-1"></i>LOG Loop
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="alert('MUSC Loop は開発中です')">
+                            <i class="fas fa-dumbbell me-1"></i>MUSC Loop
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -179,9 +198,27 @@
         </div>
     </div>
 
-    <footer class="bg-light mt-5 py-4">
-        <div class="container text-center">
-            <p class="mb-0">&copy; 2025 技術ブログ. All rights reserved.</p>
+    <footer class="bg-dark text-light mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-infinity me-2"></i>ImpLoop</h5>
+                    <p class="mb-2">効率化のループを回すため、小さな改善の機会を継続的に提供する。</p>
+                </div>
+                <div class="col-md-4">
+                    <h6>サービス一覧</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/blog/" class="text-light text-decoration-none"><i class="fas fa-blog me-1"></i>ImpLoop Blog</a></li>
+                        <li><a href="/quiz/" class="text-light text-decoration-none"><i class="fas fa-graduation-cap me-1"></i>Eng Loop</a></li>
+                        <li><a href="/time-tracker/" class="text-light text-decoration-none"><i class="fas fa-tasks me-1"></i>LOG Loop</a></li>
+                        <li><a href="#" class="text-light text-decoration-none" onclick="alert('MUSC Loop は開発中です')"><i class="fas fa-dumbbell me-1"></i>MUSC Loop</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <p class="mb-0">&copy; 2025 ImpLoop. All rights reserved.</p>
+                    <small class="text-muted">継続的改善で理想の自分へ</small>
+                </div>
+            </div>
         </div>
     </footer>
 
@@ -190,4 +227,4 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>
 </body>
-</html> 
+</html>

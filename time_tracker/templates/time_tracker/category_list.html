@@ -1,0 +1,187 @@
+{% extends 'time_tracker/base.html' %}
+{% load static %}
+
+{% block title %}カテゴリ管理{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="bi bi-folder"></i> カテゴリ管理
+                </h2>
+                <a href="{% url 'time_tracker:category_create' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> 新規カテゴリ作成
+                </a>
+            </div>
+            
+            {% if categories %}
+            <div class="row">
+                {% for category in categories %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 border-start border-3" style="border-color: {{ category.color }} !important;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="card-title mb-0">
+                                    <span class="badge rounded-pill" style="background-color: {{ category.color }}; color: white; margin-right: 8px;">
+                                        &nbsp;
+                                    </span>
+                                    {{ category.name }}
+                                </h5>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'time_tracker:category_update' category.pk %}">
+                                                <i class="bi bi-pencil"></i> 編集
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-danger" href="{% url 'time_tracker:category_delete' category.pk %}">
+                                                <i class="bi bi-trash"></i> 削除
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            {% if category.description %}
+                            <p class="card-text text-muted small mb-3">{{ category.description }}</p>
+                            {% endif %}
+                            
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <div class="border-end">
+                                        <h6 class="text-primary mb-0">{{ category.task_set.count }}</h6>
+                                        <small class="text-muted">タスク数</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <h6 class="text-success mb-0">{{ category.active_tasks_count|default:0 }}</h6>
+                                    <small class="text-muted">実行中</small>
+                                </div>
+                            </div>
+                            
+                            {% if category.task_set.all %}
+                            <div class="mt-3">
+                                <h6 class="small text-muted mb-2">最近のタスク:</h6>
+                                {% for task in category.task_set.all|slice:":3" %}
+                                <div class="d-flex justify-content-between align-items-center py-1">
+                                    <small class="text-truncate me-2">
+                                        <a href="{% url 'time_tracker:task_detail' task.pk %}" class="text-decoration-none">
+                                            {{ task.title }}
+                                        </a>
+                                    </small>
+                                    {% if task.is_active %}
+                                    <span class="badge bg-success badge-sm">実行中</span>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                                {% if category.task_set.count > 3 %}
+                                <small class="text-muted">他 {{ category.task_set.count|add:"-3" }}件...</small>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="d-flex justify-content-between">
+                                <a href="{% url 'time_tracker:task_create' %}?category={{ category.pk }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-plus"></i> タスク追加
+                                </a>
+                                <a href="{% url 'time_tracker:category_update' category.pk %}" class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-pencil"></i> 編集
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- ページネーション -->
+            {% if is_paginated %}
+            <nav aria-label="カテゴリページネーション">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">
+                                <i class="bi bi-chevron-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_obj.number }}</span>
+                    </li>
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                                <i class="bi bi-chevron-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            
+            {% else %}
+            <!-- カテゴリがない場合 -->
+            <div class="text-center py-5">
+                <i class="bi bi-folder-x display-1 text-muted"></i>
+                <h4 class="mt-3 text-muted">カテゴリがまだありません</h4>
+                <p class="text-muted">タスクを整理するためのカテゴリを作成しましょう</p>
+                <a href="{% url 'time_tracker:category_create' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-plus-circle"></i> 最初のカテゴリを作成
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.badge-sm {
+    font-size: 0.7em;
+}
+
+.border-end {
+    border-right: 1px solid #dee2e6 !important;
+}
+
+.text-truncate {
+    max-width: 150px;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.btn {
+    border-radius: 8px;
+}
+</style>
+{% endblock %}
